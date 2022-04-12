@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@font-face {
+  font-family: "formula";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../src/Assets/Fonts/formula-condensed-cufonfonts/FormulaCondensed-Light.otf");
+}
+@font-face {
+  font-family: "ppformula";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../src/Assets/Fonts/ppformula/FontsFree-Net-PPFormula-ExtendedBold-1.ttf");
+}
+@font-face {
+  font-family: "caliSemiBold";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../src/Assets/Fonts/calibre/CalibreSemibold.otf");
+}
+@font-face {
+  font-family: "caliLight";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../src/Assets/Fonts/calibre/CalibreLight.otf");
+}
+@font-face {
+  font-family: "caliMed";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../src/Assets/Fonts/calibre/CalibreMedium.otf");
+}
+@font-face {
+  font-family: "caliReg";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../src/Assets/Fonts/calibre/CalibreRegular.otf");
+}
+video{
+  object-fit: cover
+}
+span.MuiChip-label{
+  margin-top: 5px;
+}
