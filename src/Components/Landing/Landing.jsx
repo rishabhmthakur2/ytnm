@@ -12,6 +12,7 @@ import avatar from '../../Assets/Images/avatar.png'
 import coming_soon from "../../Assets/Images/coming_soon.png"
 import yntm_logo_short from '../../Assets/Images/yntm_logo_short.png'
 import Web3 from 'web3';
+import './Landing.scss'
 
 let web3
 let NFTSmartContract
@@ -19,7 +20,7 @@ let NFTSmartContract
 const useStyles = makeStyles((theme) => ({
     root: {
         marginTop: '80px',
-        padding: '15em 5em',
+        padding: '15em 8em',
         [theme.breakpoints.down("sm")]: {
             padding: '1em'
         },
@@ -94,8 +95,8 @@ const useStyles = makeStyles((theme) => ({
     },
     mr10: {
         marginRight: '10px',
-        fontFamily:'caliSemiBold',
-        fontSize:'86px'
+        fontFamily: 'caliSemiBold',
+        fontSize: '86px'
     },
     ml10: {
         marginLeft: '10px'
@@ -154,7 +155,7 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '0.7rem',
         padding: '4.2px 15px',
         marginLeft: '1em',
-        width:'110px'
+        width: '110px'
     },
     aucTitle: {
         fontSize: '13px',
@@ -162,18 +163,18 @@ const useStyles = makeStyles((theme) => ({
     },
     aucTime: {
         fontWeight: '200',
-        fontSize: '2em',
-        fontFamily: 'formula',
+        fontSize: '24px',
+        fontFamily: 'ppFormulaSemi',
         marginLeft: '0.5em'
     },
     aucMainWrap: {
         marginTop: '2em',
         border: '1px solid #000',
-        padding: '0px 1em',
+        padding: '0.2em 1em 0em',
         borderRadius: '7px',
         display: 'flex',
         alignItems: 'center',
-        width:'380px'
+        width: '350px'
     },
     mb2: {
         marginBottom: '2em'
@@ -209,17 +210,20 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
             height: 'auto'
         },
-    },caliLight:{
-        fontFamily:'caliLight'
-    },f22:{
-        fontSize:'22px'
-    },caliMed:{
-        fontFamily:'caliMed'
-    },f16:{
-        fontSize:'16px'
-    },chipText:{
-        fontFamily:'caliReg',
-        fontSize:'1em'
+    }, caliLight: {
+        fontFamily: 'caliLight'
+    }, f22: {
+        fontSize: '22px'
+    }, caliMed: {
+        fontFamily: 'caliMed'
+    }, f16: {
+        fontSize: '16px'
+    }, chipText: {
+        fontFamily: 'caliReg',
+        fontSize: '1em'
+    },
+    dFlex:{
+        display:'flex'
     }
 }))
 
@@ -235,30 +239,30 @@ const Landing = (props) => {
         console.log(senderAddress)
         setIsLoading(true);
         NFTSmartContract.methods.cost()
-        .call({
-            from: senderAddress
-        })
-        .then((mintCost) => {
-            console.log(mintCost)
-            NFTSmartContract.methods.mint(1).send({
-                from: senderAddress,
-                value: mintCost
+            .call({
+                from: senderAddress
             })
-            .on('sent', function (send) {
-                setIsLoading(true);
+            .then((mintCost) => {
+                console.log(mintCost)
+                NFTSmartContract.methods.mint(1).send({
+                    from: senderAddress,
+                    value: mintCost
+                })
+                    .on('sent', function (send) {
+                        setIsLoading(true);
+                    })
+                    .on('receipt', function (receipt) {
+                        setIsLoading(false);
+                        window.alert("Minting complete. You can now headover to OpenSea!");
+                        loadWeb3();
+                    })
+                    .on('error', function (error) {
+                        setIsLoading(false);
+                        window.alert("Error: " + JSON.stringify(error.message))
+                    });
             })
-            .on('receipt', function (receipt) {
-                setIsLoading(false);
-                window.alert("Minting complete. You can now headover to OpenSea!");
-                loadWeb3();
-            })
-            .on('error', function (error) {
-                setIsLoading(false);
-                window.alert("Error: " + JSON.stringify(error.message))
-            });
-        })
     }
-            
+
 
     const loadWeb3 = useCallback(async () => {
         if (window.ethereum) {
@@ -270,7 +274,7 @@ const Landing = (props) => {
         if (web3) {
             setIsLoading(true)
             NFTSmartContract = new web3.eth.Contract(
-                [{"inputs":[{"internalType":"string","name":"_name","type":"string"},{"internalType":"string","name":"_symbol","type":"string"},{"internalType":"string","name":"_initBaseURI","type":"string"},{"internalType":"string","name":"_initNotRevealedUri","type":"string"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"approved","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"addressMintedBalance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"baseExtension","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"baseURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"cost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_user","type":"address"}],"name":"isWhitelisted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxMintAmount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_mintAmount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"nftPerAddressLimit","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"notRevealedUri","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"onlyWhitelisted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bool","name":"_state","type":"bool"}],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"reveal","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"revealed","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_newBaseExtension","type":"string"}],"name":"setBaseExtension","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_newBaseURI","type":"string"}],"name":"setBaseURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newCost","type":"uint256"}],"name":"setCost","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_limit","type":"uint256"}],"name":"setNftPerAddressLimit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_notRevealedURI","type":"string"}],"name":"setNotRevealedURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"_state","type":"bool"}],"name":"setOnlyWhitelisted","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_newmaxMintAmount","type":"uint256"}],"name":"setmaxMintAmount","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenByIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"index","type":"uint256"}],"name":"tokenOfOwnerByIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_owner","type":"address"}],"name":"walletOfOwner","outputs":[{"internalType":"uint256[]","name":"","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address[]","name":"_users","type":"address[]"}],"name":"whitelistUsers","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"whitelistedAddresses","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"payable","type":"function"}],
+                [{ "inputs": [{ "internalType": "string", "name": "_name", "type": "string" }, { "internalType": "string", "name": "_symbol", "type": "string" }, { "internalType": "string", "name": "_initBaseURI", "type": "string" }, { "internalType": "string", "name": "_initNotRevealedUri", "type": "string" }], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "approved", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "Approval", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "owner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "operator", "type": "address" }, { "indexed": false, "internalType": "bool", "name": "approved", "type": "bool" }], "name": "ApprovalForAll", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }], "name": "OwnershipTransferred", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "from", "type": "address" }, { "indexed": true, "internalType": "address", "name": "to", "type": "address" }, { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "inputs": [{ "internalType": "address", "name": "", "type": "address" }], "name": "addressMintedBalance", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "approve", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "baseExtension", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "baseURI", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "cost", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "getApproved", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "address", "name": "operator", "type": "address" }], "name": "isApprovedForAll", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_user", "type": "address" }], "name": "isWhitelisted", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "maxMintAmount", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "maxSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_mintAmount", "type": "uint256" }], "name": "mint", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [], "name": "name", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "nftPerAddressLimit", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "notRevealedUri", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "onlyWhitelisted", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "owner", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "ownerOf", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "bool", "name": "_state", "type": "bool" }], "name": "pause", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "paused", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "reveal", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "revealed", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }, { "internalType": "bytes", "name": "_data", "type": "bytes" }], "name": "safeTransferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "operator", "type": "address" }, { "internalType": "bool", "name": "approved", "type": "bool" }], "name": "setApprovalForAll", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "string", "name": "_newBaseExtension", "type": "string" }], "name": "setBaseExtension", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "string", "name": "_newBaseURI", "type": "string" }], "name": "setBaseURI", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_newCost", "type": "uint256" }], "name": "setCost", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_limit", "type": "uint256" }], "name": "setNftPerAddressLimit", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "string", "name": "_notRevealedURI", "type": "string" }], "name": "setNotRevealedURI", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bool", "name": "_state", "type": "bool" }], "name": "setOnlyWhitelisted", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_newmaxMintAmount", "type": "uint256" }], "name": "setmaxMintAmount", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }], "name": "supportsInterface", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "symbol", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "tokenByIndex", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "owner", "type": "address" }, { "internalType": "uint256", "name": "index", "type": "uint256" }], "name": "tokenOfOwnerByIndex", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "tokenURI", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "totalSupply", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "from", "type": "address" }, { "internalType": "address", "name": "to", "type": "address" }, { "internalType": "uint256", "name": "tokenId", "type": "uint256" }], "name": "transferFrom", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_owner", "type": "address" }], "name": "walletOfOwner", "outputs": [{ "internalType": "uint256[]", "name": "", "type": "uint256[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address[]", "name": "_users", "type": "address[]" }], "name": "whitelistUsers", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "name": "whitelistedAddresses", "outputs": [{ "internalType": "address", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "withdraw", "outputs": [], "stateMutability": "payable", "type": "function" }],
                 '0x1ccb799c49a23ec0e984b93198d6e0b72bdd99ef',
             )
             console.log({ NFTSmartContract })
@@ -285,7 +289,7 @@ const Landing = (props) => {
                     console.log(remainingSupply);
                     setRemainCnt(remainingSupply)
                 })
-        setIsLoading(false)
+            setIsLoading(false)
         } else {
             setIsLoading(false)
             window.alert(
@@ -293,45 +297,52 @@ const Landing = (props) => {
             )
         }
     }, [setRemainCnt])
-    
+
     return (
         <Grid container>
             <ResponsiveDrawer />
             <Grid container className={classes.root}>
-                <Grid item lg={1} md={1} sm={1} xs={12}>
-                </Grid>
                 <Grid item lg={7} md={7} sm={7} xs={12}>
                     <Grid item lg={12} md={12} >
-                        <Typography className={clsx(classes.primaryTitle, classes.dFlexBase)}>
+                        {/* <Typography className={clsx(classes.primaryTitle, classes.dFlexBase)}>
                             <span className={classes.mr10}>Collect</span>
                             <img src={nft_text} alt='nft_text' className={classes.nftTextMob} />
                             <img src={star_icon} alt='star_icon' className={clsx(classes.alignSelfStart, classes.mt30Nag, classes.starIconMob)} />
-                        </Typography>
+                        </Typography> */}
+                        <p class="MuiTypography-root jss6 jss23 MuiTypography-body1">
+                            <span class="jss20">Collect
+                                {/* <img src={nft_text} alt='nft_text' className={classes.nftTextMob} />
+                                <img src={star_icon} alt='star_icon' className={clsx(classes.alignSelfStart, classes.mt30Nag, classes.starIconMob)} /> */}
+                                <span style={{ color: 'white', fontSize: '9rem',WebkitTextStrokeWidth: '1px',WebkitTextStrokeColor: 'black' }}>NFT</span> 
+                            <img src={star_icon} alt='star_icon' style={{verticalAlign:'super',position: 'relative',top:'-25px'}} />
+                                <br />
+                                Photography Art</span>
+                        </p>
                     </Grid>
-                    <Typography className={classes.primaryTitle}>Photography Art</Typography>
-                    <Typography className={clsx(classes.secTitle, classes.width400,classes.caliLight,classes.f22)}>Collect Iconic Moments From Pop-Culture History
+                    {/* <Typography className={classes.primaryTitle}>Photography Art</Typography> */}
+                    <Typography className={clsx(classes.secTitle, classes.width400, classes.caliLight, classes.f22)}>Collect Iconic Moments From Pop-Culture History
                         from the Archives of World-Renowned Photographers</Typography>
-                    <Typography className={clsx(classes.descBoldTitle, classes.mt2, classes.dFlexVc,classes.caliMed,classes.f16)}>
+                    <Typography className={clsx(classes.descBoldTitle, classes.mt2, classes.dFlexVc, classes.caliMed, classes.f16)}>
                         Start Collecting
-                        <img src={more_icon} className={classes.ml10} width={13} height={13} alt='more_icon' />
+                        <img src={more_icon} className={classes.ml10}  width={13} height={13} alt='more_icon' />
                     </Typography>
                 </Grid>
-                <Grid item lg={3} md={3} sm={3} xs={12}>
-                    <img src={ipad_mock} className={classes.ipadImg} alt='ipad_mock' />
+                <Grid item lg={5} md={5} sm={5} xs={12}>
+                    <img src={ipad_mock} className={classes.ipadImg} class='jss43' alt='ipad_mock' />
                 </Grid>
             </Grid>
             <Grid container className={classes.silenceWrap}>
-                <Grid item lg={1} md={1} sm={1} xs={12}>
+                {/* <Grid item lg={1} md={1} sm={1} xs={12}>
+                </Grid> */}
+                <Grid item lg={6} md={6} sm={6} xs={12} className={classes.dFlexC}>
+                    <img src={DaftPunk} className={classes.DaftPunkImg} height={650} alt='DaftPunk' />
                 </Grid>
-                <Grid item lg={5} md={5} sm={5} xs={12} className={classes.dFlexC}>
-                    <img src={DaftPunk} className={classes.DaftPunkImg} alt='DaftPunk' />
-                </Grid>
-                <Grid item lg={6} md={6} sm={6} xs={12}>
+                <Grid item lg={6} md={6} sm={6} xs={12} style={{paddingLeft:isMobile?'0':'3em'}}>
                     <Typography className={classes.blockTitle}>
                         The Sound of Silence
                     </Typography>
                     <Chip
-                        className={clsx(classes.bgWhite,classes.chipText)}
+                        className={clsx(classes.bgWhite, classes.chipText)}
                         avatar={<Avatar alt="avatar" src={avatar} />}
                         label="Sebastien Micke"
                     />
@@ -347,20 +358,20 @@ const Landing = (props) => {
                         <span>Edition Size: 50</span>
                         <span className={classes.ml2}>Token ID: 2</span>
                     </Typography>
-                    <Typography className={clsx(classes.valueWrap)}>
+                    <Typography style = {{marginTop: '0.5em'}}className={clsx(classes.valueWrap)}>
                         {remainCnt}/50
                     </Typography>
                     <Grid item className={classes.dFlexC}>
                         <Typography className={clsx(classes.valueWrap, classes.f1)}>
                             0.05ETH
                         </Typography>
-                        <Button className={classes.redBtn} 
+                        <Button className={classes.redBtn}
                         // onClick={handleBuyNow}
                         >
-                        {isLoading ?
-                                    <CircularProgress />
-                                    :
-                                    "Buy Now"}
+                            {isLoading ?
+                                <CircularProgress />
+                                :
+                                "Buy Now"}
                         </Button>
                     </Grid>
                 </Grid>
@@ -371,16 +382,16 @@ const Landing = (props) => {
                         COMING SOON
                     </Typography>
                 </Grid>
-                <Grid item lg={1} md={1} sm={1} xs={12}>
+                {/* <Grid item lg={1} md={1} sm={1} xs={12}>
+                </Grid> */}
+                <Grid item lg={9} md={9} sm={9} xs={12} className={classes.dFlex}>
+                    <img src={coming_soon} width={isMobile ? 'auto' : '750px'} className={classes.DaftPunkImg} alt='coming_soon' />
                 </Grid>
-                <Grid item lg={5} md={5} sm={5} xs={12} className={classes.dFlexC}>
-                    <img src={coming_soon} width={isMobile ? 'auto':'450px'} className={classes.DaftPunkImg} alt='coming_soon' />
-                </Grid>
-                <Grid item lg={4} md={4} sm={4} xs={12}>
+                <Grid item lg={3} md={3} sm={3} xs={12}>
                     <Typography className={clsx(classes.blockTitle, classes.f14)}>
                         The Balmain Army
                     </Typography>
-                    <Typography className={clsx(classes.caliLight,classes.f22)}>
+                    <Typography className={clsx(classes.caliLight, classes.f22)}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                         The collector will get the original PNG file in 5478 × 7304 pixels.
                     </Typography>
@@ -394,9 +405,9 @@ const Landing = (props) => {
             <Grid container className={classes.footerWrap}>
                 <Grid item lg={3} md={3} sm={3} xs={12} className={classes.dFlexSb}>
                     <img src={yntm_logo_short} alt='yntm_logo_short' />
-                    <Typography className={classes.mediaLink}>Twitter</Typography>
+                    {/* <Typography className={classes.mediaLink}>Twitter</Typography>
                     <Typography className={classes.mediaLink}>Instagram</Typography>
-                    <Typography className={classes.mediaLink}>Discord</Typography>
+                    <Typography className={classes.mediaLink}>Discord</Typography> */}
                 </Grid>
                 <Grid item lg={3} md={3} sm={3} xs={12} >
                     <Typography className={clsx(classes.mediaLink, classes.textAlignEnd)}>

@@ -284,8 +284,12 @@ function ResponsiveDrawer(props) {
             {/* </Grid> */}
           </>
         ))}
+            <i class="fab fa-twitter socialIcon"></i>
+      <i class="fab fa-instagram socialIcon"></i>
       </Grid>
       <Grid item lg={1} md={1} className={clsx(classes.dFlex, classes.flexEnd)}>
+  
+
         <Button className={classes.connectBtn} onClick={loadWeb3}>
           {isLoading ? <CircularProgress /> : (web3 ? "Connected" : "Connect")}
         </Button>

@@ -16,7 +16,7 @@ code {
   font-family: "formula";
   font-style: normal;
   font-weight: normal;
-  src: url("../src/Assets/Fonts/formula-condensed-cufonfonts/FormulaCondensed-Light.otf");
+  src: url("../src/Assets/Fonts/ppformula/FontsFree-Net-PPFormula-ExtendedBold-1.ttf");
 }
 @font-face {
   font-family: "ppformula";
@@ -48,9 +48,20 @@ code {
   font-weight: normal;
   src: url("../src/Assets/Fonts/calibre/CalibreRegular.otf");
 }
+@font-face {
+  font-family: "ppFormulaSemi";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../src/Assets/Fonts/ppformula/PPFormula-SemiCondensedThin.otf");
+}
 video{
   object-fit: cover
 }
 span.MuiChip-label{
   margin-top: 5px;
+}
+.socialIcon{
+  font-size: 23px;
+    margin-right: 1em;
+    cursor: pointer;
 }
