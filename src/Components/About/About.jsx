@@ -56,7 +56,7 @@ const About = (props) => {
     const classes = useStyles()
     return (
         <Grid container>
-            <ResponsiveDrawer activeNav={'About'} />
+            <ResponsiveDrawer activeNav={'About/Story'} />
             <Grid container className={classes.root}>
                 <Typography className={classes.blockTitle}>About</Typography>
                 <Typography className={classes.secTitle}>

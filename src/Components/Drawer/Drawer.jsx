@@ -194,13 +194,19 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "29px",
     padding: "7px 25px",
   },
+  navItemTxt:{
+    '&:hover':{
+      color:'#FF6363'
+    }
+  }
 }));
 function ResponsiveDrawer(props) {
   const { activeNav } = props;
   const navList = [
-    { name: "About", active: false },
-    { name: "Gallery", active: false },
-    { name: "Contact", active: false },
+    { name: "About/Story", active: false },
+    { name: "Mint Now", active: false },
+    { name: "Galleria", active: false },
+    { name: "Roadmap", active: false },
   ];
   const classes = useStyles();
   const theme = useTheme();
@@ -277,7 +283,8 @@ function ResponsiveDrawer(props) {
             <Typography
               key={item.name}
               onClick={() => itemClick(item, i)}
-              style={{ color: activeNav === item.name && "#FF6363",paddingRight:'15px' }}
+              style={{ color: activeNav === item.name && "#FF6363",paddingRight:'15px',cursor:'pointer' }}
+              className={classes.navItemTxt}
             >
               {item.name}
             </Typography>
@@ -297,9 +304,9 @@ function ResponsiveDrawer(props) {
     </Grid>
   );
   const itemClick = (item, i) => {
-    if (item.name === "About") {
+    if (item.name === "About/Story") {
       navigate("/about");
-    } else if (item.name === "Gallery") {
+    } else if (item.name === "Galleria") {
       navigate("/gallery");
     }
   };

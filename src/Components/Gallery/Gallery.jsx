@@ -98,7 +98,7 @@ const Gallery = (props) => {
     return (
 
         <Grid container >
-            <ResponsiveDrawer  activeNav={'Gallery'}/>
+            <ResponsiveDrawer  activeNav={'Galleria'}/>
             <Grid item xs={12} className={classes.root}>
                 <Typography className={classes.blockTitle}>Gallery</Typography>
                 <ItemsCarousel

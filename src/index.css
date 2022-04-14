@@ -13,6 +13,12 @@ code {
 }
 
 @font-face {
+  font-family: "calibreBlack";
+  font-style: normal;
+  font-weight: normal;
+  src: url("../src/Assets/Fonts/calibre/CalibreBlack.otf");
+}
+@font-face {
   font-family: "formula";
   font-style: normal;
   font-weight: normal;

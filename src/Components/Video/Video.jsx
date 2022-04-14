@@ -46,14 +46,14 @@ const Video = (props) => {
         <Grid container className={classes.posRel}>
             <ReactPlayer
                 classes={classes.videoWrap}
-                style={{ objectFit: 'cover' }}
+                style={{ objectFit: 'cover',overflowY:'hidden' }}
                 url={loopVideo}
                 volume={0}
                 onReady={handleOnReady}
                 playing={playing}
                 loop={true}
                 width='100%'
-                height={'99.2vh'}
+                height={'100vh'}
             />
             <Typography className={classes.centerText} onClick={()=>navigate('/landing')}>CLICK TO ENTER</Typography>
 

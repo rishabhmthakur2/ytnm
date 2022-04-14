@@ -1,7 +1,10 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { Avatar, Button, CircularProgress, Grid, makeStyles, Typography, useMediaQuery } from "@material-ui/core";
+import { AppBar, Avatar, Box, Button, CircularProgress, Dialog, Grid, makeStyles, Typography, useMediaQuery } from "@material-ui/core";
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import clsx from 'clsx';
 import Chip from '@material-ui/core/Chip';
+import CloseIcon from "@material-ui/icons/Close";
 import ResponsiveDrawer from '../Drawer/Drawer';
 import nft_text from '../../Assets/Images/nft_text.png'
 import star_icon from '../../Assets/Images/star_icon.png'
@@ -9,21 +12,80 @@ import more_icon from '../../Assets/Images/more_icon.png'
 import ipad_mock from "../../Assets/Images/ipad_mock.png"
 import DaftPunk from "../../Assets/Images/DaftPunk.png"
 import avatar from '../../Assets/Images/avatar.png'
-import coming_soon from "../../Assets/Images/coming_soon.png"
+import coming_soon from "../../Assets/Images/balmain_army.jpeg"
 import yntm_logo_short from '../../Assets/Images/yntm_logo_short.png'
+import story_img from "../../Assets/Images/story_img.jpeg"
 import Web3 from 'web3';
 import './Landing.scss'
+import yntmTheme from '../../scss/yntmTheme';
 
 let web3
 let NFTSmartContract
 
 const useStyles = makeStyles((theme) => ({
+    "@global": {
+        '.MuiAppBar-colorPrimary': {
+            padding: '0px',
+            background: 'transparent',
+            boxShadow: 'none'
+        },
+        '.MuiTab-fullWidth': {
+            borderBottom: '0.75px solid #FFBCBC'
+        },
+        '.PrivateTabIndicator-colorSecondary-90': {
+            background: '#ff6363'
+        },
+        '.PrivateTabIndicator-root-88': {
+            height: '0.75px'
+        },
+        '.MuiTab-wrapper': {
+            textTransform: 'capitalize',
+            fontFamily: 'ppFormulaSemi',
+            fontWeight: 'bold',
+            fontSize: '14px'
+        },
+        'header.MuiPaper-root.MuiAppBar-root.MuiAppBar-positionStatic.MuiAppBar-colorPrimary.MuiPaper-elevation4': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        '.MuiTabs-root': {
+            width: '80%'
+        },
+        '.MuiPaper-root.MuiDialog-paper.MuiDialog-paperScrollPaper.MuiDialog-paperWidthMd.MuiDialog-paperFullWidth.MuiPaper-elevation24.MuiPaper-rounded': {
+            boxShadow: 'none',
+            background: 'transparent',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1em'
+        }
+    },
+
     root: {
         marginTop: '80px',
-        padding: '15em 8em',
+        padding: '15em 8em 15em 12em',
         [theme.breakpoints.down("sm")]: {
             padding: '1em'
         },
+    },
+    closeIconWrap: {
+        color: yntmTheme.colors.colorHalfWhite7,
+        alignSelf: 'self-end',
+        cursor: 'pointer',
+        fontSize: '2rem'
+    },
+    mt1: {
+        marginTop: '1em'
+    },
+    mt4: {
+        marginTop: '4em'
+    },
+    cursorPointer: {
+        cursor: 'pointer'
+    },
+    mt6: {
+        marginTop: '6em'
     },
     primaryTitle: {
         fontWeight: '600',
@@ -120,6 +182,11 @@ const useStyles = makeStyles((theme) => ({
             width: '100%'
         },
     },
+    ArmyImg: {
+        [theme.breakpoints.down("sm")]: {
+            width: '80%'
+        },
+    },
     blockTitle: {
         fontSize: '1.8rem',
         fontWeight: '700',
@@ -144,7 +211,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         fontSize: '5em',
         fontWeight: '100',
-        fontFamily: 'formula',
+        fontFamily: 'ppFormulaSemi',
     },
     textAlignCenter: {
         textAlign: 'center'
@@ -204,8 +271,8 @@ const useStyles = makeStyles((theme) => ({
             textAlign: 'center',
         }
     }, ipadImg: {
-        width: '345px',
-        height: '345px',
+        width: '450px',
+        height: '450px',
         [theme.breakpoints.down("sm")]: {
             width: '100%',
             height: 'auto'
@@ -222,16 +289,51 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'caliReg',
         fontSize: '1em'
     },
-    dFlex:{
-        display:'flex'
+    dFlex: {
+        display: 'flex'
+    },pr2:{
+        paddingRight:'2em'
     }
 }))
+function TabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+
 
 const Landing = (props) => {
     const classes = useStyles()
-    const [remainCnt, setRemainCnt] = useState('0')
+    const [remainCnt, setRemainCnt] = useState('2')
     const [isLoading, setIsLoading] = useState(false)
+    const [isImg, setIsImg] = useState(false)
+    const [modalImg, setModalImg] = useState('')
     const isMobile = useMediaQuery('(max-width:600px)');
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
     const handleBuyNow = async () => {
         await loadWeb3();
         const addresses = await web3.eth.getAccounts()
@@ -299,7 +401,7 @@ const Landing = (props) => {
     }, [setRemainCnt])
 
     return (
-        <Grid container>
+        <Grid container class="landing-main">
             <ResponsiveDrawer />
             <Grid container className={classes.root}>
                 <Grid item lg={7} md={7} sm={7} xs={12}>
@@ -313,31 +415,90 @@ const Landing = (props) => {
                             <span class="jss20">Collect
                                 {/* <img src={nft_text} alt='nft_text' className={classes.nftTextMob} />
                                 <img src={star_icon} alt='star_icon' className={clsx(classes.alignSelfStart, classes.mt30Nag, classes.starIconMob)} /> */}
-                                <span style={{ color: 'white', fontSize: '9rem',WebkitTextStrokeWidth: '1px',WebkitTextStrokeColor: 'black' }}>NFT</span> 
-                            <img src={star_icon} alt='star_icon' style={{verticalAlign:'super',position: 'relative',top:'-25px'}} />
+                                <span style={{ fontFamily: "calibreBlack", color: 'white', fontSize: '9rem', WebkitTextStrokeWidth: '1px', WebkitTextStrokeColor: 'black' }}> NFT</span>
+                                <img src={star_icon} alt='star_icon' style={{ verticalAlign: 'super', position: 'relative', top: '-25px' }} />
                                 <br />
                                 Photography Art</span>
                         </p>
                     </Grid>
                     {/* <Typography className={classes.primaryTitle}>Photography Art</Typography> */}
-                    <Typography className={clsx(classes.secTitle, classes.width400, classes.caliLight, classes.f22)}>Collect Iconic Moments From Pop-Culture History
-                        from the Archives of World-Renowned Photographers</Typography>
+                    <Typography className={clsx(classes.secTitle, classes.caliLight, classes.f22)}>
+                        Buy and sell NFTs from the world’s top photographers
+                    </Typography>
                     <Typography className={clsx(classes.descBoldTitle, classes.mt2, classes.dFlexVc, classes.caliMed, classes.f16)}>
                         Start Collecting
-                        <img src={more_icon} className={classes.ml10}  width={13} height={13} alt='more_icon' />
+                        <img src={more_icon} className={classes.ml10} width={13} height={13} alt='more_icon' />
                     </Typography>
                 </Grid>
                 <Grid item lg={5} md={5} sm={5} xs={12}>
-                    <img src={ipad_mock} className={classes.ipadImg} class='jss43' alt='ipad_mock' />
+                    <img src={ipad_mock} onClick={() => { setIsImg(true); setModalImg(ipad_mock) }} className={clsx(classes.ipadImg, classes.cursorPointer)} alt='ipad_mock' />
                 </Grid>
             </Grid>
             <Grid container className={classes.silenceWrap}>
+                <AppBar position="static">
+                    <Tabs value={value} onChange={handleChange} variant="fullWidth">
+                        <Tab label="About" {...a11yProps(0)} style={{ color: 'black' }} />
+                        <Tab label="Story" {...a11yProps(1)} style={{ color: 'black' }} />
+                    </Tabs>
+                </AppBar>
+                <TabPanel value={value} index={0}>
+                    <Grid container className={classes.mt6}>
+                        <Grid item xs={12} sm={6} md={6} lg={6}>
+                            <img src={story_img} alt='story' width={'90%'} onClick={() => { setIsImg(true); setModalImg(story_img) }} className={classes.cursorPointer} />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={6} lg={6}>
+                            <Typography className={clsx(classes.blockTitle, classes.f14)}>
+                                About
+                            </Typography>
+                            <Typography className={clsx(classes.caliLight, classes.f22, classes.mt1,classes.pr2)}>
+                                It was just another day spent on Insta, my feet kicked up, phone in hand, tapping, scrolling, when I saw it.
+                                My work, featuring several of the biggest celebrities, posted to one of their accounts without so much as a mention of my name. No credit. No shout out. Nothing.
+                                A piece forever synonymous with the subject - not the creator. Her three-hundred million followers, showering her with praise and adoration.
+                                It was then that a numbness took hold, my head growing light as air, a strange frequency coursing through my veins – blinding light, beckoning me from the Metaversal corridor.
+                                I crossed over, only then to watch myself completely dematerialize – my consciousness instantly transplanted in the digital construct before you.
+                            </Typography>
+
+                        </Grid>
+                    </Grid>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    <Grid container className={classes.mt6}>
+                        <Grid item xs={12} sm={6} md={6} lg={6}>
+                            <img src={story_img} alt='story' width={'90%'} onClick={() => { setIsImg(true); setModalImg(story_img) }} className={classes.cursorPointer} />
+                        </Grid>
+                        <Grid item xs={12} sm={6} md={6} lg={6} >
+                            <Typography className={clsx(classes.blockTitle, classes.f14)}>
+                                Story
+                            </Typography>
+                            <Typography className={clsx(classes.caliLight, classes.f22, classes.mt1,classes.pr2)} style={{
+                                height: '63vh',
+                                overflowY: 'auto'
+                            }}>
+                                It was just another day spent on Insta, my feet kicked up, phone in hand, tapping, scrolling, when I saw it.
+                                My work, featuring several of the biggest celebrities, posted to one of their accounts without so much as a mention of my name. No credit. No shout out. Nothing.
+                                A piece forever synonymous with the subject - not the creator. Her three-hundred million followers, showering her with praise and adoration.
+                                It was then that a numbness took hold, my head growing light as air, a strange frequency coursing through my veins – blinding light, beckoning me from the Metaversal corridor.
+                                I crossed over, only then to watch myself completely dematerialize – my consciousness instantly transplanted in the digital construct before you.
+
+                                It was just another day spent on Insta, my feet kicked up, phone in hand, tapping, scrolling, when I saw it.
+                                My work, featuring several of the biggest celebrities, posted to one of their accounts without so much as a mention of my name. No credit. No shout out. Nothing.
+                                A piece forever synonymous with the subject - not the creator. Her three-hundred million followers, showering her with praise and adoration.
+                                It was then that a numbness took hold, my head growing light as air, a strange frequency coursing through my veins – blinding light, beckoning me from the Metaversal corridor.
+                                I crossed over, only then to watch myself completely dematerialize – my consciousness instantly transplanted in the digital construct before you.
+                            </Typography>
+
+                        </Grid>
+                    </Grid>
+                </TabPanel>
+
+            </Grid>
+            <Grid container className={clsx(classes.silenceWrap, classes.bgWhite)}>
                 {/* <Grid item lg={1} md={1} sm={1} xs={12}>
                 </Grid> */}
                 <Grid item lg={6} md={6} sm={6} xs={12} className={classes.dFlexC}>
-                    <img src={DaftPunk} className={classes.DaftPunkImg} height={650} alt='DaftPunk' />
+                    <img src={DaftPunk} className={clsx(classes.DaftPunkImg, classes.cursorPointer)} height={650} alt='DaftPunk' onClick={() => { setIsImg(true); setModalImg(DaftPunk) }} />
                 </Grid>
-                <Grid item lg={6} md={6} sm={6} xs={12} style={{paddingLeft:isMobile?'0':'3em'}}>
+                <Grid item lg={6} md={6} sm={6} xs={12} style={{ paddingLeft: isMobile ? '0' : '3em' }}>
                     <Typography className={classes.blockTitle}>
                         The Sound of Silence
                     </Typography>
@@ -351,14 +512,17 @@ const Landing = (props) => {
                         Description
                     </Typography>
                     <Typography className={clsx(classes.caliLight, classes.f22)}>
-                        Daft Punk Los Angeles April 2013. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        The collector will get the original PNG file in 5478 × 7304 pixels.
+                        Originally featured in Paris Match Magazine, this NFT features the iconic French electronic music duo Daft Punk. <br />
+                        Photographed by celebrity photographer Sébastien Micke, the image was taken right before the release of their hit album “Get Lucky."<br />
+                        <br />
+                        “The Sound of Silence” is a limited run of 50 NFT’s available for purchase. The collector will receive one-of-fifty images and the original PNG file.
+                        5478 x 7304 Pixels
                     </Typography>
                     <Typography className={clsx(classes.secTitle, classes.f1, classes.mt2, classes.redFont)}>
                         <span>Edition Size: 50</span>
                         <span className={classes.ml2}>Token ID: 2</span>
                     </Typography>
-                    <Typography style = {{marginTop: '0.5em'}}className={clsx(classes.valueWrap)}>
+                    <Typography style={{ marginTop: '0.5em' }} className={clsx(classes.valueWrap)}>
                         {remainCnt}/50
                     </Typography>
                     <Grid item className={classes.dFlexC}>
@@ -366,7 +530,7 @@ const Landing = (props) => {
                             0.05ETH
                         </Typography>
                         <Button className={classes.redBtn}
-                        // onClick={handleBuyNow}
+                            onClick={handleBuyNow}
                         >
                             {isLoading ?
                                 <CircularProgress />
@@ -376,24 +540,30 @@ const Landing = (props) => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid container className={clsx(classes.silenceWrap, classes.bgWhite)}>
+            <Grid container className={clsx(classes.silenceWrap,)}>
                 <Grid item xs={12}>
                     <Typography className={clsx(classes.blockTitle, classes.textAlignCenter, classes.mb2)}>
                         COMING SOON
                     </Typography>
                 </Grid>
-                {/* <Grid item lg={1} md={1} sm={1} xs={12}>
-                </Grid> */}
-                <Grid item lg={9} md={9} sm={9} xs={12} className={classes.dFlex}>
-                    <img src={coming_soon} width={isMobile ? 'auto' : '750px'} className={classes.DaftPunkImg} alt='coming_soon' />
+                <Grid item lg={6} md={6} sm={6} xs={12} className={classes.dFlexC}>
+                    <img src={coming_soon} width={isMobile ? 'auto' : '600px'} height={isMobile ? 'auto' : '500px'}
+                        className={clsx(classes.ArmyImg, classes.cursorPointer)} alt='coming_soon'
+                        onClick={() => { setIsImg(true); setModalImg(coming_soon) }}
+                    />
                 </Grid>
-                <Grid item lg={3} md={3} sm={3} xs={12}>
+                <Grid item lg={6} md={6} sm={6} xs={12} style={{ paddingLeft: isMobile ? '0' : '3em' }}>
                     <Typography className={clsx(classes.blockTitle, classes.f14)}>
                         The Balmain Army
                     </Typography>
                     <Typography className={clsx(classes.caliLight, classes.f22)}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        The collector will get the original PNG file in 5478 × 7304 pixels.
+                        For Paris Match - ‘The Balmain Army’, June 2016 <br />
+                        SEBASTIEN MICKE <br />
+                        <br />
+                        Kylie Jenner, Kris Jenner, Kim Kardashian, Kanye West, joined by supermodels Cindy Crawford, Jourdan Dunn, Sean O’Pry, and Balmain‘s creative director Olivier Rousteing, all dressed in looks from Balmain. Lensed by fashion photographer Sebastien Micke, this was featured in numerous campaigns and editorials. However, the image was notoriously featured on Kim Kardashian’s Instagram, to which Micke received no credit.<br />
+                        <br />
+                        “The Balmain Army” will be an exclusive 1-of-1 collectible NFT, available for purchase by auction. The collector with the highest bid will receive the only verified NFT of its kind and the original PNG file.
+                        5478 x 7304 Pixels
                     </Typography>
                     <Typography className={classes.aucMainWrap}>
                         <span className={classes.aucTitle}>Auction Starts </span>
@@ -415,6 +585,19 @@ const Landing = (props) => {
                     </Typography>
                 </Grid>
             </Grid>
+            <Dialog
+                fullWidth={true}
+                maxWidth={'md'}
+                open={isImg}
+                onClose={() => setIsImg(false)}
+            >
+                <CloseIcon className={classes.closeIconWrap} onClick={() => setIsImg(false)} />
+                <img src={modalImg} width={'65%'} style={{
+                    height: '80vh',
+                    objectFit: 'cover'
+                }} alt='ipad_mock' />
+
+            </Dialog>
         </Grid>
     )
 }
