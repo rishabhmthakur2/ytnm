@@ -16,7 +16,6 @@ import coming_soon from "../../Assets/Images/balmain_army.jpeg"
 import yntm_logo_short from '../../Assets/Images/yntm_logo_short.png'
 import story_img from "../../Assets/Images/story_img.jpeg"
 import Web3 from 'web3';
-import './Landing.scss'
 import yntmTheme from '../../scss/yntmTheme';
 
 let web3
@@ -411,7 +410,7 @@ const Landing = (props) => {
                             <img src={nft_text} alt='nft_text' className={classes.nftTextMob} />
                             <img src={star_icon} alt='star_icon' className={clsx(classes.alignSelfStart, classes.mt30Nag, classes.starIconMob)} />
                         </Typography> */}
-                        <p class="MuiTypography-root jss6 jss23 MuiTypography-body1">
+                        <p class="MuiTypography-root MuiTypography-body1">
                             <span class="jss20">Collect
                                 {/* <img src={nft_text} alt='nft_text' className={classes.nftTextMob} />
                                 <img src={star_icon} alt='star_icon' className={clsx(classes.alignSelfStart, classes.mt30Nag, classes.starIconMob)} /> */}
