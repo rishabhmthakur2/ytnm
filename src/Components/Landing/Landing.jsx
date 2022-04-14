@@ -17,6 +17,7 @@ import yntm_logo_short from '../../Assets/Images/yntm_logo_short.png'
 import story_img from "../../Assets/Images/story_img.jpeg"
 import Web3 from 'web3';
 import yntmTheme from '../../scss/yntmTheme';
+import team_image from "../../Assets/Images/team.png"
 
 let web3
 let NFTSmartContract
@@ -108,6 +109,12 @@ const useStyles = makeStyles((theme) => ({
             width: '30px'
         },
     },
+    pad1: {
+        padding: "2em 10em 2em 10em",
+        [theme.breakpoints.down("sm")]: {
+          padding: "1em",
+        },
+      },
     dFlexStart: {
         display: 'flex',
         alignItems: 'flex-start'
@@ -280,6 +287,8 @@ const useStyles = makeStyles((theme) => ({
         fontFamily: 'caliLight'
     }, f22: {
         fontSize: '22px'
+    }, f18: {
+        fontSize: '18px'
     }, caliMed: {
         fontFamily: 'caliMed'
     }, f16: {
@@ -442,14 +451,23 @@ const Landing = (props) => {
                 </AppBar>
                 <TabPanel value={value} index={0}>
                     <Grid container className={classes.mt6}>
-                        <Grid item xs={12} sm={6} md={6} lg={6}>
+                    <Grid item xs={12} sm={6} md={6} lg={6}>
                             <img src={story_img} alt='story' width={'90%'} onClick={() => { setIsImg(true); setModalImg(story_img) }} className={classes.cursorPointer} />
                         </Grid>
-                        <Grid item xs={12} sm={6} md={6} lg={6}>
+                        <Grid item xs={12} sm={6} md={6} lg={6} >
                             <Typography className={clsx(classes.blockTitle, classes.f14)}>
                                 About
                             </Typography>
-                            <Typography className={clsx(classes.caliLight, classes.f22, classes.mt1,classes.pr2)}>
+                            <Typography className={clsx(classes.caliLight, classes.f18, classes.mt1,classes.pr2)} style={{
+                                height: '63vh',
+                                overflowY: 'auto'
+                            }}>
+                                It was just another day spent on Insta, my feet kicked up, phone in hand, tapping, scrolling, when I saw it.
+                                My work, featuring several of the biggest celebrities, posted to one of their accounts without so much as a mention of my name. No credit. No shout out. Nothing.
+                                A piece forever synonymous with the subject - not the creator. Her three-hundred million followers, showering her with praise and adoration.
+                                It was then that a numbness took hold, my head growing light as air, a strange frequency coursing through my veins – blinding light, beckoning me from the Metaversal corridor.
+                                I crossed over, only then to watch myself completely dematerialize – my consciousness instantly transplanted in the digital construct before you.
+
                                 It was just another day spent on Insta, my feet kicked up, phone in hand, tapping, scrolling, when I saw it.
                                 My work, featuring several of the biggest celebrities, posted to one of their accounts without so much as a mention of my name. No credit. No shout out. Nothing.
                                 A piece forever synonymous with the subject - not the creator. Her three-hundred million followers, showering her with praise and adoration.
@@ -469,7 +487,7 @@ const Landing = (props) => {
                             <Typography className={clsx(classes.blockTitle, classes.f14)}>
                                 Story
                             </Typography>
-                            <Typography className={clsx(classes.caliLight, classes.f22, classes.mt1,classes.pr2)} style={{
+                            <Typography className={clsx(classes.caliLight, classes.f18, classes.mt1,classes.pr2)} style={{
                                 height: '63vh',
                                 overflowY: 'auto'
                             }}>
@@ -492,6 +510,21 @@ const Landing = (props) => {
 
             </Grid>
             <Grid container className={clsx(classes.silenceWrap, classes.bgWhite)}>
+                {/* <Grid item lg={1} md={1} sm={1} xs={12}>
+                </Grid> */}
+                <Grid xs={12} className={classes.dFlexC}>
+                <Typography className={classes.blockTitle}>
+                        The Team
+                    </Typography>
+                </Grid>
+                <Grid xs={12} className={classes.blockTitle} style={{ paddingLeft: isMobile ? '0' : '9em', alignSelf: 'center' }}>
+                    
+                    <Grid item lg={5} md={5} sm={5} xs={12}>
+                    <img src={team_image} className={clsx(classes.ipadImg, classes.cursorPointer)} style={{ marginLeft: "25%", marginTop: "2em", alignSelf: "center" }} alt='team_image' />
+                </Grid>
+                </Grid>
+            </Grid>
+            <Grid container className={clsx(classes.silenceWrap,)}>
                 {/* <Grid item lg={1} md={1} sm={1} xs={12}>
                 </Grid> */}
                 <Grid item lg={6} md={6} sm={6} xs={12} className={classes.dFlexC}>
@@ -539,7 +572,7 @@ const Landing = (props) => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid container className={clsx(classes.silenceWrap,)}>
+            <Grid container className={clsx(classes.silenceWrap, classes.bgWhite)}>
                 <Grid item xs={12}>
                     <Typography className={clsx(classes.blockTitle, classes.textAlignCenter, classes.mb2)}>
                         COMING SOON
